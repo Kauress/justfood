@@ -12,7 +12,7 @@ let resultDiv = document.getElementById('results-div');
 
 
 
-//Note: Call 'Search Recipe' API here. If we get a valid API response then store this response in globalvariable & if the API response is blank/null then it  will call 'No record found' display method
+//Note: Call 'Search Recipe' API here. If we got valid API response then store this response in globalvariable & if the API response is blank/null then it  will call 'No record found' display method
 function search()// this function is called by clicking on DOM search button 
 {
     if(document.getElementById('txtSearch').value !== "")// if the input is not an empty string
@@ -22,7 +22,7 @@ function search()// this function is called by clicking on DOM search button
     it will give you random recipes and much more.
     */
    //We need to get an API key from Spoonacular in order to query the API
-let APIKey = 'apiKey=e5fb540e1a04465694e69238aa9bc3a2';
+let APIKey = 'apiKey=8492a6d48e6e480d87cf4cff5614e331';
 //construct search URL: https://spoonacular.com/food-api/docs#Search-Recipes-Complex
 let fetchURL = configApiUrl + APIKey + "&query=" + inputText
 // use fetchAPI
@@ -78,22 +78,26 @@ function buildDOM()
         let div = document.createElement("div");
         div.setAttribute("class", "col-sm-3")
 		div.innerHTML += '<img class="img-fluid" src="'+totalData[i].image+'">';
-        div.innerHTML +='<h4> <a href="javascript:void(0);" onclick="fnGoToSourceURL('+ totalData[i].id+');">' + totalData[i].title + '</a>' + '</h4>';
+		//div.innerHTML+= '<h3>' + totalData[i].title + '</h3>';
+        div.innerHTML +='<h4> <a href="javascript:void(0);" onclick="goToSourceURL('+ totalData[i].id+');">' + totalData[i].title + ' </h4> </a>';
         console.log(totalData[i].id)
         resultDiv.appendChild(div)
 
 	}
 
 }
-/*
-function fnGoToSourceURL(recipeID)
-{
-    fetch(configApiUrl + 'recipes/' + recipeID + '/information?apiKey=8492a6d48e6e480d87cf4cff5614e331')
-    .then(responseRow => {
-        return responseRow.json();       
+
+function goToSourceURL(recipeID){
+    console.log(recipeID);
+    //https://api.spoonacular.com/recipes/639794/information?apiKey=8492a6d48e6e480d87cf4cff5614e331
+    let url = "https://api.spoonacular.com/recipes/" + recipeID + '/information?apiKey=8492a6d48e6e480d87cf4cff5614e331';
+    console.log(url)
+    fetch(url)
+    .then(function(response) {
+        return response.json();       
     })
-    .then((dataRow) => {
-        window.open(dataRow.sourceUrl, '_blank').focus();
+    .then((data) => {
+        window.open(data.sourceUrl, '_blank').focus();
     });
 }
 
